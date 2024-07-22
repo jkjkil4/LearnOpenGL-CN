@@ -6,12 +6,12 @@
 翻译     | [Django](http://bullteacher.com/), Krasjet, Geequlim, [BLumia](https://github.com/blumia/)
 校对     | [AoZhang](https://github.com/SuperAoao)
 
-现实世界的光照是极其复杂的，而且会受到诸多因素的影响，这是我们有限的计算能力所无法模拟的。因此OpenGL的光照使用的是简化的模型，对现实的情况进行近似，这样处理起来会更容易一些，而且看起来也差不多一样。这些光照模型都是基于我们对光的物理特性的理解。其中一个模型被称为<def>冯氏光照模型</def>(Phong Lighting Model)。冯氏光照模型的主要结构由3个分量组成：环境(Ambient)、漫反射(Diffuse)和镜面(Specular)光照。下面这张图展示了这些光照分量看起来的样子：
+现实世界的光照是极其复杂的，而且会受到诸多因素的影响，这是我们有限的计算能力所无法模拟的。因此OpenGL的光照使用的是简化的模型，对现实的情况进行近似，这样处理起来会更容易一些，而且看起来也差不多一样。这些光照模型都是基于我们对光的物理特性的理解。其中一个模型被称为<def>风氏光照模型</def>(Phong Lighting Model)。风氏光照模型的主要结构由3个分量组成：环境(Ambient)、漫反射(Diffuse)和镜面(Specular)光照。下面这张图展示了这些光照分量看起来的样子：
 
 ![](../img/02/02/basic_lighting_phong.png)
 
 - <def>环境光照</def>(Ambient Lighting)：即使在黑暗的情况下，世界上通常也仍然有一些光亮（月亮、远处的光），所以物体几乎永远不会是完全黑暗的。为了模拟这个，我们会使用一个环境光照常量，它永远会给物体一些颜色。
-- <def>漫反射光照</def>(Diffuse Lighting)：模拟光源对物体的方向性影响(Directional Impact)。它是冯氏光照模型中视觉上最显著的分量。物体的某一部分越是正对着光源，它就会越亮。
+- <def>漫反射光照</def>(Diffuse Lighting)：模拟光源对物体的方向性影响(Directional Impact)。它是风氏光照模型中视觉上最显著的分量。物体的某一部分越是正对着光源，它就会越亮。
 - <def>镜面光照</def>(Specular Lighting)：模拟有光泽物体上面出现的亮点。镜面光照的颜色相比于物体的颜色会更倾向于光的颜色。
 
 为了创建有趣的视觉场景，我们希望模拟至少这三种光照分量。我们将以最简单的一个开始：**环境光照**。
@@ -35,7 +35,7 @@ void main()
 }
 ```
 
-如果你现在运行你的程序，你会注意到冯氏光照的第一个阶段已经应用到你的物体上了。这个物体非常暗，但由于应用了环境光照（注意光源立方体没受影响是因为我们对它使用了另一个着色器），也不是完全黑的。它看起来应该像这样：
+如果你现在运行你的程序，你会注意到风氏光照的第一个阶段已经应用到你的物体上了。这个物体非常暗，但由于应用了环境光照（注意光源立方体没受影响是因为我们对它使用了另一个着色器），也不是完全黑的。它看起来应该像这样：
 
 ![](../img/02/02/ambient_lighting.png)
 
@@ -205,7 +205,7 @@ Normal = mat3(transpose(inverse(model))) * aNormal;
 
 # 镜面光照
 
-如果你还没被这些光照计算搞得精疲力尽，我们就再把镜面高光(Specular Highlight)加进来，这样冯氏光照才算完整。
+如果你还没被这些光照计算搞得精疲力尽，我们就再把镜面高光(Specular Highlight)加进来，这样风氏光照才算完整。
 
 和漫反射光照一样，镜面光照也决定于光的方向向量和物体的法向量，但是它也决定于观察方向，例如玩家是从什么方向看向这个片段的。镜面光照决定于表面的反射特性。如果我们把物体表面设想为一面镜子，那么镜面光照最强的地方就是我们看到表面上反射光的地方。你可以在下图中看到效果：
 
@@ -262,7 +262,7 @@ vec3 result = (ambient + diffuse + specular) * objectColor;
 FragColor = vec4(result, 1.0);
 ```
 
-我们现在为冯氏光照计算了全部的光照分量。根据你的视角，你可以看到类似下面的画面：
+我们现在为风氏光照计算了全部的光照分量。根据你的视角，你可以看到类似下面的画面：
 
 ![](../img/02/02/basic_lighting_specular.png)
 
@@ -270,17 +270,17 @@ FragColor = vec4(result, 1.0);
 
 !!! Important
 
-    在光照着色器的早期，开发者曾经在顶点着色器中实现冯氏光照模型。在顶点着色器中做光照的优势是，相比片段来说，顶点要少得多，因此会更高效，所以（开销大的）光照计算频率会更低。然而，顶点着色器中的最终颜色值是仅仅只是那个顶点的颜色值，片段的颜色值是由插值光照颜色所得来的。结果就是这种光照看起来不会非常真实，除非使用了大量顶点。
+    在光照着色器的早期，开发者曾经在顶点着色器中实现风氏光照模型。在顶点着色器中做光照的优势是，相比片段来说，顶点要少得多，因此会更高效，所以（开销大的）光照计算频率会更低。然而，顶点着色器中的最终颜色值是仅仅只是那个顶点的颜色值，片段的颜色值是由插值光照颜色所得来的。结果就是这种光照看起来不会非常真实，除非使用了大量顶点。
 
     ![](../img/02/02/basic_lighting_gouruad.png)
 
-    在顶点着色器中实现的冯氏光照模型叫做<def>Gouraud着色</def>(Gouraud Shading)，而不是<def>冯氏着色</def>(Phong Shading)。记住，由于插值，这种光照看起来有点逊色。冯氏着色能产生更平滑的光照效果。
+    在顶点着色器中实现的风氏光照模型叫做<def>Gouraud着色</def>(Gouraud Shading)，而不是<def>风氏着色</def>(Phong Shading)。记住，由于插值，这种光照看起来有点逊色。风氏着色能产生更平滑的光照效果。
 
 现在你应该能够看到着色器的强大之处了。只用很少的信息，着色器就能计算出光照如何影响到所有物体的片段颜色。[下一节](03 Materials.md)中，我们会更深入的研究光照模型，看看我们还能做些什么。
 
 ## 练习
 
-- 目前，我们的光源是静止的，你可以尝试使用<fun>sin</fun>或<fun>cos</fun>函数让光源在场景中来回移动。观察光照随时间的改变能让你更容易理解冯氏光照模型。[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise1)。
+- 目前，我们的光源是静止的，你可以尝试使用<fun>sin</fun>或<fun>cos</fun>函数让光源在场景中来回移动。观察光照随时间的改变能让你更容易理解风氏光照模型。[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise1)。
 - 尝试使用不同的环境光、漫反射和镜面强度，观察它们怎么是影响光照效果的。同样，尝试实验一下镜面光照的反光度因子。尝试理解为什么某一个值能够有着特定视觉输出。
-- 在观察空间（而不是世界空间）中计算冯氏光照：[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise2)。
-- 尝试实现一个Gouraud着色（而不是冯氏着色）。如果你做对了话，立方体的光照应该会[看起来有些奇怪](../img/02/02/basic_lighting_exercise3.png)，尝试推理为什么它会看起来这么奇怪：[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise3)。
+- 在观察空间（而不是世界空间）中计算风氏光照：[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise2)。
+- 尝试实现一个Gouraud着色（而不是风氏着色）。如果你做对了话，立方体的光照应该会[看起来有些奇怪](../img/02/02/basic_lighting_exercise3.png)，尝试推理为什么它会看起来这么奇怪：[参考解答](https://learnopengl.com/code_viewer.php?code=lighting/basic_lighting-exercise3)。

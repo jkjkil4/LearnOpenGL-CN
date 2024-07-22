@@ -185,7 +185,7 @@
 
 ## 02-02
 
-- Phong Lighting Model：冯氏光照模型
+- Phong Lighting Model：风氏光照模型
 - Ambient Lighting：环境光照
 - Diffuse Lighting：漫反射光照
 - Specular Lighting：镜面光照
@@ -204,7 +204,7 @@
 - Specular Intensity：镜面强度
 - Shininess：反光度
 - Gouraud Shading：Gouraud着色
-- Phong Shading：冯氏着色
+- Phong Shading：风氏着色
 
 ## 02-03
 
