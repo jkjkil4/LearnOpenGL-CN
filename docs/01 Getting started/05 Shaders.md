@@ -27,7 +27,7 @@ out type out_variable_name;
 
 uniform type uniform_name;
 
-int main()
+void main()
 {
   // 处理输入并进行一些图形操作
   ...
