@@ -137,7 +137,7 @@ void main()
 
 <def>Uniform</def>是另一种从我们的应用程序在 CPU 上传递数据到 GPU 上的着色器的方式，但uniform和顶点属性有些不同。首先，uniform是<def>全局的</def>(Global)。全局意味着uniform变量必须在每个着色器程序对象中都是独一无二的，而且它可以被着色器程序的任意着色器在任意阶段访问。第二，无论你把uniform值设置成什么，uniform会一直保存它们的数据，直到它们被重置或更新。
 
-要在 GLSL 中声明 uniform，我们只需将 `uniform` 关键字添加到具有类型和名称的着色器中。从那时起，我们就可以在着色器中使用新声明的 uniform。我们来看看这次是否能通过uniform设置三角形的颜色：
+要在 GLSL 中声明 uniform，我们只需在着色器中使用 `uniform` 关键字，并带上类型和名称。从那时起，我们就可以在着色器中使用新声明的 uniform。我们来看看这次是否能通过uniform设置三角形的颜色：
 
 ```c++
 #version 330 core
